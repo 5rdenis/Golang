@@ -11,6 +11,7 @@ import (
     "github.com/gorilla/mux"
 )
 
+
 func Index(w http.ResponseWriter, r *http.Request) {
     fmt.Fprint(w, "Welcome!\n")
 }
@@ -74,9 +75,37 @@ func AccountUpdate(w http.ResponseWriter, r *http.Request) {
             accounts = append(accounts[:index], accounts[index+1:]...)
             var account Account
             _ = json.NewDecoder(r.Body).Decode(&account)
+            account.Id = accountId
+            accounts = append(accounts, account) 
+            json.NewEncoder(w).Encode(account)
             return
         }
     }
     json.NewEncoder(w).Encode(accounts)
 }
+/*
+func TransferMoney (w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+    vars := mux.Vars(r)
+    var t Transfer
+            _ = json.NewDecoder(r.Body).Decode(&t)
+    idFrom, _ := strconv.Atoi(vars["idFrom"])
+    idTo, _ := strconv.Atoi(vars["idTo"])
+    accounts[idFrom].Balance -= t.Value
+    accounts[idTo].Balance += t.Value
+    w.WriteHeader(http.StatusOK)
 
+}
+*/
+
+/*
+func updateUser(c echo.Context) error {
+    u := new(User)
+    if err := c.Bind(u); err != nil {
+        return err
+    }
+    id, _ := strconv.Atoi(c.Param("id"))
+    users[id].Name = u.Name
+    return c.JSON(http.StatusOK, users[id])
+}
+*/

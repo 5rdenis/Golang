@@ -38,7 +38,7 @@ var routes = Routes{
     },
     Route{
         "AccountUpdate",
-        "PATCH",
+        "PUT",
         "/accounts/{accountId}",
         AccountUpdate,
     },

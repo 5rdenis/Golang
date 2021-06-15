@@ -7,3 +7,11 @@ type Account struct {
 }
  
 type Accounts []Account
+
+/*
+type Transfer struct {
+    IdFrom        int       `json:"idfrom"`
+    IdTo          int       `json:"idto"`
+    Value         int       `json:"value"`
+}
+*/
