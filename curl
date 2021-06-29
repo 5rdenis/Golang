@@ -3,3 +3,13 @@ curl -X POST -H 'Content-Type: application/json' -d '{"name":"Max","balance":100
 curl -X POST -H 'Content-Type: application/json' -d '{"name":"Denis","balance":300}' localhost:1323/users
 
 curl -X PATCH   -H 'Content-Type: application/json'   -d '{"value":50}'   localhost:1323/users/1/2
+
+
+
+
+
+curl -X POST -H 'Content-Type: application/json' -d '{"name":"Max","balance":100}' localhost:8080/accounts
+
+
+
+curl -X POST -H 'Content-Type: application/json' -d '{"name":"Denis","balance":350}' localhost:8080/accounts

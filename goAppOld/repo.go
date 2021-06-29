@@ -1,40 +1,39 @@
 package main
  
-import "fmt"
- 
 var currentId int
- 
-var accounts Accounts
- 
-// Give us some seed data
-func init() {
-    RepoCreateAccount(Account{Name: "Denis",Balance: 700})
-    RepoCreateAccount(Account{Name: "Max"})
-}
- 
-func RepoFindAccount(id int) Account {
-    for _, a := range accounts {
-        if a.Id == id {
-            return a
-        }
-    }
-    // return empty Account if not found
-    return Account{}
-}
- 
+var Accounts = map[int]*Account{}
+
+
+
 func RepoCreateAccount(a Account) Account {
     currentId += 1
-    a.Id = currentId
-    accounts = append(accounts, a)
+    Accounts[currentId] = &a
+    Accounts[currentId].Id = currentId
     return a
 }
- 
-func RepoDestroyAccount(id int) error {
-    for i, a := range accounts {
-        if a.Id == id {
-            accounts = append(accounts[:i], accounts[i+1:]...)
-            return nil
-        }
+
+func RepoUpdateAccount(id int, a Account) Account {
+	if (Accounts[id].Name != a.Name && a.Name != "") {
+		Accounts[id].Name = a.Name
+	} 
+	if (Accounts[id].Balance != a.Balance && a.Balance != nil) {
+		Accounts[id].Balance = a.Balance
     }
-    return fmt.Errorf("Could not find Account with id of %d to delete", id)
+    return a
+
 }
+
+
+
+/*
+func createUser(c echo.Context) error {
+	u := &User{
+		Id: seq,
+	}
+	if err := c.Bind(u); err != nil {
+		return err
+	}
+	users[u.Id] = u
+	seq++
+	return c.JSON(http.StatusCreated, u)
+	*/

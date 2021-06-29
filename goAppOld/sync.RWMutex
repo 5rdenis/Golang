@@ -1,0 +1,4 @@
+sync.RWMutex
+zerolog
+sync
+type ClientError struct {  Code int  Msg string }

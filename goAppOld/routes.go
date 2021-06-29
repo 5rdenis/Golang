@@ -38,8 +38,14 @@ var routes = Routes{
     },
     Route{
         "AccountUpdate",
-        "PUT",
-        "/accounts/{accountId}",
+        "POST",
+        "/update",
         AccountUpdate,
+    },
+    Route{
+        "TransferMoney",
+        "POST",
+        "/transfer",
+        TransferMoney,
     },
 }

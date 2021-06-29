@@ -12,6 +12,7 @@ import (
 )
 
 
+
 func Index(w http.ResponseWriter, r *http.Request) {
     fmt.Fprint(w, "Welcome!\n")
 }
@@ -19,7 +20,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 func AccountIndex(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     w.WriteHeader(http.StatusOK)
-    if err := json.NewEncoder(w).Encode(accounts); err != nil {
+    if err := json.NewEncoder(w).Encode(Accounts); err != nil {
         panic(err)
     }
 }
@@ -30,10 +31,10 @@ func AccountShow(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         panic(err)
     }
-    t := RepoFindAccount(accountId)
+    //t := RepoFindAccount(accountId)
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     w.WriteHeader(http.StatusCreated)
-    if err := json.NewEncoder(w).Encode(t.Balance); err != nil {
+    if err := json.NewEncoder(w).Encode(Accounts[accountId]); err != nil {
         panic(err)
     }
 }
@@ -64,39 +65,44 @@ func AccountCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 func AccountUpdate(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-    vars := mux.Vars(r)
-    accountId, err := strconv.Atoi(vars["accountId"])
+    var account Account
+    body, err := ioutil.ReadAll(io.LimitReader(r.Body, 1048576))
     if err != nil {
         panic(err)
     }
-    for index, item := range accounts {
-        if item.Id == accountId {
-            accounts = append(accounts[:index], accounts[index+1:]...)
-            var account Account
-            _ = json.NewDecoder(r.Body).Decode(&account)
-            account.Id = accountId
-            accounts = append(accounts, account) 
-            json.NewEncoder(w).Encode(account)
-            return
+    if err := r.Body.Close(); err != nil {
+        panic(err)
+    }
+    if err := json.Unmarshal(body, &account); err != nil {
+        w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+        w.WriteHeader(422) // unprocessable entity
+        if err := json.NewEncoder(w).Encode(err); err != nil {
+            panic(err)
         }
     }
-    json.NewEncoder(w).Encode(accounts)
+ 
+    t := RepoUpdateAccount(account.Id,account)
+    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+    w.WriteHeader(http.StatusCreated)
+    if err := json.NewEncoder(w).Encode(t); err != nil {
+        panic(err)
+    }
 }
-/*
+
+
 func TransferMoney (w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-    vars := mux.Vars(r)
-    var t Transfer
-            _ = json.NewDecoder(r.Body).Decode(&t)
-    idFrom, _ := strconv.Atoi(vars["idFrom"])
-    idTo, _ := strconv.Atoi(vars["idTo"])
-    accounts[idFrom].Balance -= t.Value
-    accounts[idTo].Balance += t.Value
-    w.WriteHeader(http.StatusOK)
-
+    var transfer Transfer
+    _ = json.NewDecoder(r.Body).Decode(&transfer)
+    idFrom := transfer.IdFrom
+    idTo := transfer.IdTo
+    if *transfer.Value <= *Accounts[idFrom].Balance {
+        *Accounts[idFrom].Balance -= *transfer.Value
+        *Accounts[idTo].Balance += *transfer.Value
+        w.WriteHeader(http.StatusOK)
+    }
 }
-*/
+
 
 /*
 func updateUser(c echo.Context) error {
