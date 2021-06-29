@@ -7,7 +7,6 @@ import (
     "io"
     "io/ioutil"
     "strconv"
-
     "github.com/gorilla/mux"
 )
 
@@ -92,6 +91,8 @@ func AccountUpdate(w http.ResponseWriter, r *http.Request) {
 func TransferMoney (w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     var transfer Transfer
+    transfer.Rw.Lock()
+    defer transfer.Rw.Unlock() 
     _ = json.NewDecoder(r.Body).Decode(&transfer)
     idFrom := transfer.IdFrom
     idTo := transfer.IdTo
