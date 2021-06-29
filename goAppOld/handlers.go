@@ -89,7 +89,6 @@ func AccountUpdate(w http.ResponseWriter, r *http.Request) {
     }
 }
 
-
 func TransferMoney (w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     var transfer Transfer
@@ -102,16 +101,3 @@ func TransferMoney (w http.ResponseWriter, r *http.Request) {
         w.WriteHeader(http.StatusOK)
     }
 }
-
-
-/*
-func updateUser(c echo.Context) error {
-    u := new(User)
-    if err := c.Bind(u); err != nil {
-        return err
-    }
-    id, _ := strconv.Atoi(c.Param("id"))
-    users[id].Name = u.Name
-    return c.JSON(http.StatusOK, users[id])
-}
-*/

@@ -22,18 +22,3 @@ func RepoUpdateAccount(id int, a Account) Account {
     return a
 
 }
-
-
-
-/*
-func createUser(c echo.Context) error {
-	u := &User{
-		Id: seq,
-	}
-	if err := c.Bind(u); err != nil {
-		return err
-	}
-	users[u.Id] = u
-	seq++
-	return c.JSON(http.StatusCreated, u)
-	*/

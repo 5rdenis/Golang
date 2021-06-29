@@ -5,9 +5,6 @@ type Account struct {
     Name      string    `json:"name"`
     Balance   *int      `json:"balance"`
 }
- 
-//type Accounts []Account
-
 
 type Transfer struct {
     IdFrom        int       `json:"idfrom"`
